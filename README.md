@@ -63,9 +63,12 @@ let g:mocha_coffee_command = "!coratdo {spec}" "See vim-mocha
 
 ## Notes/Caveats
 
-When calling `RunAllSpecs`, plugin expects tests within a directory to all be
-the same filetype. i.e. a specific spec directory should only contain Javascript
-mocha files.
+* When calling `RunAllSpecs`, plugin expects tests within a directory to all be
+  the same filetype. i.e. a specific spec directory should only contain
+  Javascript mocha files. (To be fixed)
+
+* Initial call expects to be done on a spec file since vim-spec has no prior
+  knowledge of which spec commmand to call
 
 Credits
 -------
