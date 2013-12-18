@@ -67,8 +67,9 @@ let g:mocha_coffee_command = "!coratdo {spec}" "See vim-mocha
   the same filetype. i.e. a specific spec directory should only contain
   Javascript mocha files. (To be fixed)
 
-* Initial call expects to be done on a spec file since vim-spec has no prior
-  knowledge of which spec commmand to call
+* [UPDATED] Initial call ~~expects to be done on a spec file since vim-spec has no prior
+  knowledge of which spec commmand to call~~ now sets spec command to dominant
+  filetype of directory.
 
 Credits
 -------
