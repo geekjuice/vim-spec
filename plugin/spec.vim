@@ -1,35 +1,65 @@
 " Get file path
 let s:plugin_path = expand("<sfile>:p:h:h")
 
+" Set Ruby/RSpec
+function! s:SetRubyCommand()
+  if !exists("g:rspec_command")
+    let s:cmd = "rspec {spec}"
+    call s:GUIRunning()
+  else
+    let g:spec_command = g:rspec_command
+  endif
+endfunction
+
+" Set Javascript
+function! s:SetJavascriptCommand()
+  if !exists("g:mocha_js_command")
+    let s:cmd = "mocha {spec}"
+    call s:GUIRunning()
+  else
+    let g:spec_command = g:mocha_js_command
+  endif
+endfunction
+
+" Set Coffeescript
+function! s:SetCoffeescriptCommand()
+  if !exists("g:mocha_coffee_command")
+    let s:cmd = "mocha --compilers coffee:coffee-script {spec}"
+    call s:GUIRunning()
+  else
+    let g:spec_command = g:mocha_coffee_command
+  endif
+endfunction
+
+" Initial Spec Command
+function! s:SetInitialSpecCommand()
+  let l:spec = s:plugin_path . "/bin/major_filetype"
+  let l:filetype = system(l:spec)
+  if l:filetype =~ 'rb'
+    call s:SetRubyCommand()
+  elseif l:filetype =~ 'js'
+    call s:SetJavascriptCommand()
+  elseif l:filetype =~ 'coffee'
+    call s:SetCoffeescriptCommand()
+  else
+    let g:spec_command = ""
+  endif
+endfunction
+
 " Determine which command based on filetype
 function! s:GetCorrectCommand()
   " Set default {rspec} command (ruby/rails)
   if &filetype ==? 'ruby'
-    if !exists("g:rspec_command")
-      let s:cmd = "rspec {spec}"
-      call s:GUIRunning()
-    else
-      let g:spec_command = g:rspec_command
-    endif
+    call s:SetRubyCommand()
   " Set default {mocha} command (javascript)
   elseif &filetype ==? 'javascript'
-    if !exists("g:mocha_js_command")
-      let s:cmd = "mocha {spec}"
-      call s:GUIRunning()
-    else
-      let g:spec_command = g:mocha_js_command
-    endif
+    call s:SetJavascriptCommand()
   " Set default {mocha} command (coffeescript)
   elseif &filetype ==? 'coffee'
-    if !exists("g:mocha_coffee_command")
-      let s:cmd = "mocha --compilers coffee:coffee-script {spec}"
-      call s:GUIRunning()
-    else
-      let g:spec_command = g:mocha_coffee_command
-    endif
+    call s:SetCoffeescriptCommand()
   " Fallthrough default
   else
-    let g:spec_command = ""
+    call s:SetInitialSpecCommand()
   endif
 endfunction
 
@@ -71,8 +101,10 @@ endfunction
 function! RunAllSpecs()
   if isdirectory('spec')
     let l:spec = "spec"
-  else
+  elseif isdirectory('test')
     let l:spec = "test"
+  else
+    let l:spec = ""
   endif
   call SetLastSpecCommand(l:spec)
   call RunSpecs(l:spec)
