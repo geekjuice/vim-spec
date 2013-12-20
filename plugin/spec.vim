@@ -78,7 +78,7 @@ function! s:GetNearestTest()
   let file = readfile(expand("%:p"))  "read current file
   let lineCount = 0                   "file line counter
   let lineDiff = 999                  "arbituary large number
-  let descPattern='\v\_^\s*it\s*[(]*\s*[''"]{1}\zs[^''"]+\ze[''"]{1}'
+  let descPattern='\v\s*it\s*[(]?\s*([''"]{1})(.+)\1{1}'
   for line in file
     let lineCount += 1
     let match = match(line,descPattern)
@@ -91,7 +91,7 @@ function! s:GetNearestTest()
       " if closer test is found, cache new nearest test
       if(currentDiff <= lineDiff)
         let lineDiff = currentDiff
-        let s:nearestTest = matchstr(line,descPattern)
+        let s:nearestTest = substitute(matchlist(line,descPattern)[2],'\v([''"()])','(.{1})','g')
       endif
     endif
   endfor

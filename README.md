@@ -5,13 +5,14 @@ Spec runner for Vim. Run Rspec and Mocha tests straight from Vim.
 Inspired by [thoughtbot/vim-rspec](https://github.com/thoughtbot/vim-rspec) and
 [geekjuice/vim-mocha](https://github.com/geekjuice/vim-mocha).
 
-Can be thought of as a combination of vim-rspec and vim-mocha. Determines
-whether to run `Mocha` or `Rspec` based on filetype. Rather than use
-different mappings for each test, use the same mapping for all spec files.
+A hacked-up marriage between vim-rspec and vim-mocha. Determines whether to run
+`Mocha` or `Rspec` based on the spec's filetype. Allows for the same mapping to
+be used for all tests.
 
-Example: Calling `<leader>t` in a Javascript file will call `mocha`. The same
-mapping can be used in a Coffeescript file and call `mocha` using the Coffeescript
-compiler. And of course, calling it from a Ruby file will invoke `rspec`.
+__Example__: Calling `<leader>t` in a Javascript file will call `mocha`. The
+same mapping can be used in a Coffeescript file and call `mocha` with the
+Coffeescript compiler. And of course, calling it from a Ruby file will invoke
+`rspec`.
 
 
 ## Installation
@@ -23,6 +24,7 @@ Bundle 'geekjuice/vim-spec'
 ```
 
 If using zsh on OS X it may be necessary to run move `/etc/zshenv` to `/etc/zshrc`.
+
 
 Using [pathogen](https://github.com/tpope/vim-pathogen)
 
@@ -58,21 +60,16 @@ let g:mocha_coffee_command = "!mocha -b --compilers coffee:coffee-script{spec}"
 
 " Using test runners
 let g:rspec_command = "Dispatch zeus rspec {spec}"
-let g:mocha_coffee_command = "!coratdo {spec}" "See vim-mocha
+let g:mocha_coffee_command = "!coratdo {spec}" "See geekjuice/vim-mocha
 ```
 
-## Notes/Caveats
+## Notes/Issues
 
-* When calling `RunAllSpecs`, plugin expects tests within a directory to all be
-  the same filetype. i.e. a specific spec directory should only contain
-  Javascript mocha files. (To be fixed)
+* Add tests (as optional submodule)
 
-* [UPDATED] Initial call ~~expects to be done on a spec file since vim-spec has no prior
-  knowledge of which spec commmand to call~~ now sets spec command to dominant
-  filetype of directory.
+* Default spec command fallbacks to the dominant spec filetype i.e. Ruby, JS, Coffee in the current directory. Future update will look for {spec|test} directories rather than search the whole parent tree
 
-Credits
--------
+## Credits
 
 [thoughtbot/vim-rspec](https://github.com/thoughtbot/vim-rspec)
 
