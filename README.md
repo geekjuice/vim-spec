@@ -65,8 +65,6 @@ let g:mocha_coffee_command = "!coratdo {spec}" "See geekjuice/vim-mocha
 
 ## Notes/Issues
 
-* Add tests (as optional submodule)
-
 * Default spec command fallbacks to the dominant spec filetype i.e. Ruby, JS, Coffee in the current directory. Future update will look for {spec|test} directories rather than search the whole parent tree
 
 ## Credits
