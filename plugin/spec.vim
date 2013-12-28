@@ -146,11 +146,7 @@ endfunction
 
 " Current Spec File Name
 function! InSpecFile()
-  if &filetype ==? "ruby"
-    return match(expand("%"), "_spec.rb$") != -1 || match(expand("%"), ".feature$") != -1
-  else
-    return match(expand("%"), "^test/") != -1 || match(expand("%"), "^spec/") != -1
-  end
+  return match(expand("%"),'\v(.js|.coffee|_spec.rb|.feature)$') != -1
 endfunction
 
 " Cache Last Spec Command
