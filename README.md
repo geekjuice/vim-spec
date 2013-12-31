@@ -15,6 +15,10 @@ Coffeescript compiler. And of course, calling it from a Ruby file will invoke
 `rspec`.
 
 
+
+__Only need Mocha? Take a look at
+[vim-mocha](https://github.com/geekjuice/vim-mocha)!__
+
 ## Installation
 
 Using [vundle](https://github.com/gmarik/vundle):
