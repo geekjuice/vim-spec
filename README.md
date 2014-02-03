@@ -32,7 +32,7 @@ If using zsh on OS X it may be necessary to run move `/etc/zshenv` to `/etc/zshr
 
 Using [pathogen](https://github.com/tpope/vim-pathogen)
 
-```shell
+```sh
 cd ~/.vim/bundle
 git clone git://github.com/geekjuice/vim-spec.git
 ```
@@ -64,7 +64,7 @@ let g:mocha_coffee_command = "!mocha -b --compilers coffee:coffee-script{spec}"
 
 " Using test runners
 let g:rspec_command = "Dispatch zeus rspec {spec}"
-let g:mocha_coffee_command = "!coratdo {spec}" "See geekjuice/vim-mocha
+let g:mocha_coffee_command = "!cortado {spec}" "See geekjuice/vim-mocha
 ```
 
 ## Notes/Issues
