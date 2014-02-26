@@ -69,7 +69,14 @@ let g:mocha_coffee_command = "!cortado {spec}" "See geekjuice/vim-mocha
 
 ## Notes/Issues
 
-* Default spec command fallbacks to the dominant spec filetype i.e. Ruby, JS, Coffee in the current directory. Future update will look for {spec|test} directories rather than search the whole parent tree
+* Default spec command fallbacks to the dominant spec filetype i.e. Ruby, JS,
+  Coffee in the current directory. Future update will look for {spec|test}
+  directories rather than search the whole parent tree
+
+* Assertions with no name i.e. no attribute for `it` in mocha will fail if
+  trying to call nearest test `RunNearestSpec` as it depends on `it` having a
+  value
+
 
 ## Credits
 
