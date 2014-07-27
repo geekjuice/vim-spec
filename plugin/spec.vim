@@ -106,7 +106,6 @@ function! RunAllSpecs()
   else
     let l:spec = ""
   endif
-  call SetLastSpecCommand(l:spec)
   call RunSpecs(l:spec)
 endfunction
 
@@ -114,7 +113,6 @@ endfunction
 function! RunCurrentSpecFile()
   if InSpecFile()
     let l:spec = @%
-    call SetLastSpecCommand(l:spec)
     call RunSpecs(l:spec)
   else
     call RunLastSpec()
@@ -130,7 +128,6 @@ function! RunNearestSpec()
       call s:GetNearestTest()
       let l:spec = @% . " -g '" . s:nearestTest . "'"
     end
-    call SetLastSpecCommand(l:spec)
     call RunSpecs(l:spec)
   else
     call RunLastSpec()
@@ -140,7 +137,7 @@ endfunction
 " Last Spec
 function! RunLastSpec()
   if exists("s:last_spec_command")
-    call RunSpecs(s:last_spec_command)
+    execute s:last_spec_command
   endif
 endfunction
 
@@ -151,7 +148,7 @@ endfunction
 
 " Cache Last Spec Command
 function! SetLastSpecCommand(spec)
-  let s:last_spec_command = a:spec
+  let s:last_spec_command = substitute(g:spec_command, "{spec}", a:spec, "g")
 endfunction
 
 " Spec Runner
@@ -160,7 +157,8 @@ function! RunSpecs(spec)
   if g:spec_command ==? ""
     echom "No spec command specified."
   else
-    execute substitute(g:spec_command, "{spec}", a:spec, "g")
+    call SetLastSpecCommand(a:spec)
+    execute s:last_spec_command
   end
 endfunction
 
