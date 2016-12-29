@@ -66,7 +66,7 @@ function! s:GetCorrectCommand(debug)
   if &filetype ==? 'ruby'
     call s:SetRubyCommand()
     " Set default {mocha} command (javascript)
-  elseif &filetype ==? 'javascript' || &filetype ==? 'typescript.tsx'
+  elseif &filetype ==? 'javascript' || &filetype ==? 'typescript.tsx' || &filetype ==? 'typescript'
     " set debug command here
     if a:debug
       call s:SetJavascriptDebugCommand()
