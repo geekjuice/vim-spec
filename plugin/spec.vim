@@ -21,6 +21,16 @@ function! s:SetJavascriptCommand()
   endif
 endfunction
 
+" Set Javascript Debug
+function! s:SetJavascriptDebugCommand()
+  if !exists("g:mocha_debug_command")
+    let s:cmd = "mocha debug {spec}"
+    call s:GUIRunning()
+  else
+    let g:spec_command = g:mocha_debug_command
+  endif
+endfunction
+
 " Set Coffeescript
 function! s:SetCoffeescriptCommand()
   if !exists("g:mocha_coffee_command")
@@ -39,6 +49,10 @@ function! s:SetInitialSpecCommand()
     call s:SetRubyCommand()
   elseif l:filetype =~ 'js'
     call s:SetJavascriptCommand()
+  elseif l:filetype =~ 'tsx'
+    call s:SetJavascriptCommand()
+  elseif l:filetype =~ 'ts'
+    call s:SetJavascriptCommand()
   elseif l:filetype =~ 'coffee'
     call s:SetCoffeescriptCommand()
   else
@@ -47,13 +61,18 @@ function! s:SetInitialSpecCommand()
 endfunction
 
 " Determine which command based on filetype
-function! s:GetCorrectCommand()
+function! s:GetCorrectCommand(debug)
   " Set default {rspec} command (ruby/rails)
   if &filetype ==? 'ruby'
     call s:SetRubyCommand()
-  " Set default {mocha} command (javascript)
-  elseif &filetype ==? 'javascript'
-    call s:SetJavascriptCommand()
+    " Set default {mocha} command (javascript)
+  elseif &filetype ==? 'javascript' || &filetype ==? 'typescript.tsx' || &filetype ==? 'typescript'
+    " set debug command here
+    if a:debug
+      call s:SetJavascriptDebugCommand()
+    else
+      call s:SetJavascriptCommand()
+    endif
   " Set default {mocha} command (coffeescript)
   elseif &filetype ==? 'coffee'
     call s:SetCoffeescriptCommand()
@@ -106,21 +125,21 @@ function! RunAllSpecs()
   else
     let l:spec = ""
   endif
-  call RunSpecs(l:spec)
+  call RunSpecs(l:spec, 0)
 endfunction
 
 " Current File
 function! RunCurrentSpecFile()
   if InSpecFile()
     let l:spec = @%
-    call RunSpecs(l:spec)
+    call RunSpecs(l:spec, 0)
   else
     call RunLastSpec()
   endif
 endfunction
 
 " Nearest Spec
-function! RunNearestSpec()
+function! RunNearestSpec(debug)
   if InSpecFile()
     if &filetype ==? "ruby"
       let l:spec = @% . ":" . line(".")
@@ -128,7 +147,7 @@ function! RunNearestSpec()
       call s:GetNearestTest()
       let l:spec = @% . " -g '" . s:nearestTest . "'"
     end
-    call RunSpecs(l:spec)
+    call RunSpecs(l:spec, a:debug)
   else
     call RunLastSpec()
   endif
@@ -143,7 +162,7 @@ endfunction
 
 " Current Spec File Name
 function! InSpecFile()
-  return match(expand("%"),'\v(.js|.coffee|_spec.rb|.feature)$') != -1
+  return match(expand("%"),'\v(.tsx|.ts|.js|.coffee|_spec.rb|.feature)$') != -1
 endfunction
 
 " Cache Last Spec Command
@@ -152,8 +171,8 @@ function! SetLastSpecCommand(spec)
 endfunction
 
 " Spec Runner
-function! RunSpecs(spec)
-  call s:GetCorrectCommand()
+function! RunSpecs(spec, debug)
+  call s:GetCorrectCommand(a:debug)
   if g:spec_command ==? ""
     echom "No spec command specified."
   else
